@@ -1,12 +1,35 @@
----------------------------------------------------------------------------------
-Version 1.4.2
-	- Fixed strict notices for get_base_url, get_base_path
-	- Updated deprecated split function to use explode
-	
----------------------------------------------------------------------------------
-Version 1.4.1
-	- Updated code to include IP address when creating a subscriber
-	
+------------------------------------------------
+Version 2.2.1
+    - Fixed an issue with the upgrade routine which caused it run even if a pre-framework version hadn't been installed.
+
+------------------------------------------------
+Version 2.2
+    - Added hook to allow args to be changed before sending submission to AWeber
+		add_filter('gform_aweber_args_pre_subscribe', 'add_ip', 10, 4);
+        function add_ip( $args, $form, $entry, $feed ){
+        	$args['ip_address'] = $entry['ip'];
+        	return $args;
+        }
+    - Added support for the middle name input when preparing Name field values.
+    - Updated how Address field values are prepared to also support Gravity Forms 1.9 method for getting country code.
+    - Updated logging statements.
+	- Fixed a low severity security vulnerability in the admin area which could be exploited by authenticated users with form administration permissions.
+	- Fixed issues when upgrading causing feeds not to get created
+
+------------------------------------------------
+Version 2.1
+	- Fixed error when creating new feeds.
+
+------------------------------------------------
+Version 2.0
+	- Added integration with Add-On Framework
+	- Added text domain/path to header
+    - Added the gform_aweber_field_value filter so the field value can be modified before sending to AWeber
+	- Updated required version of Gravity Forms to 1.8.17
+	- Updated POT file
+	- Updated to not process entries marked as spam
+    - Fixed an issue where non-string field values would cause the AWeber create subscriber process to fail
+
 ---------------------------------------------------------------------------------
 Version 1.4
 	- Added PayPal integration to subscribe user to AWeber only when payment is received
