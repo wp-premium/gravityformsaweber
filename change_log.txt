@@ -1,5 +1,10 @@
 ------------------------------------------------
-Version 2.2.1
+Version 2.3
+    - Added form and field specific versions of the gform_aweber_field_value filter.
+    - Updated minimum Gravity Forms version to 1.9.3.
+    - Updated feed processing to use GFAddOn::get_field_value(), if available, when retrieving mapped field values.
+    - Updated 'Opt-In Condition' setting label to 'Conditional Logic'.
+    - Fixed an issue with the feed list page if the AWeber auth code was not valid.
     - Fixed an issue with the upgrade routine which caused it run even if a pre-framework version hadn't been installed.
 
 ------------------------------------------------

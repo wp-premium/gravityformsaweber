@@ -1,9 +1,9 @@
 # Copyright 2009-2015 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms AWeber Add-On 2.2.1\n"
+"Project-Id-Version: Gravity Forms AWeber Add-On 2.3\n"
 "Report-Msgid-Bugs-To: http://www.gravtiyhelp.com\n"
-"POT-Creation-Date: 2015-05-11 16:58:20+00:00\n"
+"POT-Creation-Date: 2015-08-07 09:14:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,43 +24,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: class-gf-aweber.php:41
+#: class-gf-aweber.php:202
 msgid "Subscribe user to AWeber only when payment is received."
 msgstr ""
 
-#: class-gf-aweber.php:96
-msgid "AWeber Add-On v2.0"
-msgstr ""
-
-#: class-gf-aweber.php:97
-msgid ""
-"Thank you for updating! The new version of the Gravity Forms AWeber Add-On "
-"makes changes to how you manage your AWeber integration."
-msgstr ""
-
-#: class-gf-aweber.php:102
-msgid "Manage AWeber Contextually"
-msgstr ""
-
-#: class-gf-aweber.php:103
-msgid ""
-"AWeber Feeds are now accessed via the AWeber sub-menu within the Form "
-"Settings for the Form with which you would like to integrate AWeber."
-msgstr ""
-
-#: class-gf-aweber.php:113
-msgid "I understand this change, dismiss this message!"
-msgstr ""
-
-#: class-gf-aweber.php:114
-msgid "Please wait..."
-msgstr ""
-
-#: class-gf-aweber.php:126
+#: class-gf-aweber.php:217
 msgid "AWeber Account Information"
 msgstr ""
 
-#: class-gf-aweber.php:127
+#: class-gf-aweber.php:218
 msgid ""
 "AWeber is an email marketing software for designers and their clients. Use "
 "Gravity Forms to collect customer information and automatically add them to "
@@ -68,97 +40,132 @@ msgid ""
 "you can %1$ssign up for one here%2$s"
 msgstr ""
 
-#: class-gf-aweber.php:130
+#: class-gf-aweber.php:221
 msgid "%1$sClick here to retrieve your Authorization code%2$s"
 msgstr ""
 
-#: class-gf-aweber.php:133
+#: class-gf-aweber.php:224
 msgid ""
 "You will need to log in to your AWeber account. Upon a successful login, a "
 "string will be returned. Copy the whole string and paste into the text box "
 "below."
 msgstr ""
 
-#: class-gf-aweber.php:137
+#: class-gf-aweber.php:228
 msgid "Authorization Code"
 msgstr ""
 
-#: class-gf-aweber.php:153
+#: class-gf-aweber.php:252
 msgid ""
 "You can find your unique Authorization code by clicking on the link above "
 "and login into your AWeber account."
 msgstr ""
 
-#: class-gf-aweber.php:166 class-gf-aweber.php:226 class-gf-aweber.php:230
+#: class-gf-aweber.php:282
+msgid "%s Settings"
+msgstr ""
+
+#: class-gf-aweber.php:289
+msgid "To get started, please configure your %s."
+msgstr ""
+
+#: class-gf-aweber.php:292
+msgid ""
+"We are unable to login to AWeber with the provided Authorization code. "
+"Please make sure you have entered a valid Authorization code on the %s page."
+msgstr ""
+
+#: class-gf-aweber.php:323 class-gf-aweber.php:386 class-gf-aweber.php:390
 msgid "Name"
 msgstr ""
 
-#: class-gf-aweber.php:167
+#: class-gf-aweber.php:324
 msgid "AWeber Account"
 msgstr ""
 
-#: class-gf-aweber.php:168
+#: class-gf-aweber.php:325
 msgid "AWeber List"
 msgstr ""
 
-#: class-gf-aweber.php:195
+#: class-gf-aweber.php:367
 msgid "List not found in AWeber"
 msgstr ""
 
-#: class-gf-aweber.php:207
-msgid ""
-"We are unable to login to AWeber with the provided Authorization code. "
-"Please make sure you have entered a valid Authorization code in the "
-"%sSettings Page%s"
-msgstr ""
-
-#: class-gf-aweber.php:221
+#: class-gf-aweber.php:381
 msgid "AWeber Feed"
 msgstr ""
 
-#: class-gf-aweber.php:230
+#: class-gf-aweber.php:390
 msgid "Enter a feed name to uniquely identify this setup."
 msgstr ""
 
-#: class-gf-aweber.php:234 class-gf-aweber.php:239
+#: class-gf-aweber.php:394 class-gf-aweber.php:399
 msgid "Account"
 msgstr ""
 
-#: class-gf-aweber.php:239
+#: class-gf-aweber.php:399
 msgid "Select the AWeber account you would like to add your contacts to."
 msgstr ""
 
-#: class-gf-aweber.php:243 class-gf-aweber.php:247
+#: class-gf-aweber.php:403 class-gf-aweber.php:407
 msgid "Contact List"
 msgstr ""
 
-#: class-gf-aweber.php:247
+#: class-gf-aweber.php:407
 msgid "Select the AWeber list you would like to add your contacts to."
 msgstr ""
 
-#: class-gf-aweber.php:251 class-gf-aweber.php:255
+#: class-gf-aweber.php:411 class-gf-aweber.php:415
 msgid "Map Fields"
 msgstr ""
 
-#: class-gf-aweber.php:255
+#: class-gf-aweber.php:415
 msgid ""
 "Associate your AWeber fields to the appropriate Gravity Form fields by "
 "selecting the appropriate form field from the list."
 msgstr ""
 
-#: class-gf-aweber.php:259
-msgid "Opt In"
+#: class-gf-aweber.php:419 class-gf-aweber.php:422
+msgid "Conditional Logic"
 msgstr ""
 
-#: class-gf-aweber.php:262
-msgid "Opt-In Condition"
-msgstr ""
-
-#: class-gf-aweber.php:262
+#: class-gf-aweber.php:422
 msgid ""
-"When the opt-in condition is enabled, form submissions will only be "
-"exported to AWeber when the condition is met. When disabled all form "
-"submissions will be exported."
+"When conditional logic is enabled, form submissions will only be exported "
+"to AWeber when the condition is met. When disabled all form submissions "
+"will be exported."
+msgstr ""
+
+#: class-gf-aweber.php:459
+msgid "Select Account"
+msgstr ""
+
+#: class-gf-aweber.php:846
+msgid "AWeber Add-On v2.0"
+msgstr ""
+
+#: class-gf-aweber.php:848
+msgid ""
+"Thank you for updating! The new version of the Gravity Forms AWeber Add-On "
+"makes changes to how you manage your AWeber integration."
+msgstr ""
+
+#: class-gf-aweber.php:853
+msgid "Manage AWeber Contextually"
+msgstr ""
+
+#: class-gf-aweber.php:855
+msgid ""
+"AWeber Feeds are now accessed via the AWeber sub-menu within the Form "
+"Settings for the Form with which you would like to integrate AWeber."
+msgstr ""
+
+#: class-gf-aweber.php:866
+msgid "I understand this change, dismiss this message!"
+msgstr ""
+
+#: class-gf-aweber.php:867
+msgid "Please wait..."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
