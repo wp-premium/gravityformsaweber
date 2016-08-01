@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms AWeber Add-On
 Plugin URI: http://www.gravityforms.com
 Description: Integrates Gravity Forms with AWeber allowing form submissions to be automatically sent to your AWeber account
-Version: 2.3
+Version: 2.4
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityformsaweber
@@ -27,7 +27,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-define( 'GF_AWEBER_VERSION', '2.3' );
+define( 'GF_AWEBER_VERSION', '2.4' );
 
 add_action( 'gform_loaded', array( 'GF_AWeber_Bootstrap', 'load' ), 5 );
 
