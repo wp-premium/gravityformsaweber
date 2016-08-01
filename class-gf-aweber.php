@@ -66,12 +66,26 @@ class GFAWeber extends GFFeedAddOn {
 	public function export_feed( $entry, $form, $feed ) {
 
 		$email = $this->get_field_value( $form, $entry, $feed['meta']['listFields_email'] );
+
+		if ( GFCommon::is_invalid_or_empty_email( $email ) ) {
+			$this->log_error( __METHOD__ . '(): Aborting. Invalid email address: ' . $email );
+
+			return;
+		}
+
 		$name  = '';
 		if ( ! empty( $feed['meta']['listFields_fullname'] ) ) {
 			$name = $this->get_field_value( $form, $entry, $feed['meta']['listFields_fullname'] );
 		}
 
 		$account_id = $feed['meta']['account'];
+
+		if ( ! $this->is_valid_account_id( $account_id ) ) {
+			$this->log_error( __METHOD__ . '(): Aborting. Invalid account ID. ' );
+
+			return;
+		}
+
 		$list_id    = $feed['meta']['contactList'];
 
 		$aweber = $this->get_aweber_object();
@@ -273,6 +287,19 @@ class GFAWeber extends GFFeedAddOn {
 	}
 
 	/**
+	 * Enable feed duplication.
+	 *
+	 * @param int|array $id The ID of the feed to be duplicated or the feed object when duplicating a form.
+	 *
+	 * @return bool
+	 */
+	public function can_duplicate_feed( $id ) {
+
+		return true;
+
+	}
+
+	/**
 	 * If the api key is invalid or empty return the appropriate message.
 	 *
 	 * @return string
@@ -327,6 +354,19 @@ class GFAWeber extends GFFeedAddOn {
 	}
 
 	/**
+	 * Returns the value to be displayed in the AWeber Account column.
+	 *
+	 * @param array $feed The feed being included in the feed list.
+	 *
+	 * @return string
+	 */
+	public function get_column_value_account( $feed ) {
+		$account_id = $feed['meta']['account'];
+
+		return $this->is_valid_account_id( $account_id ) ? $account_id : esc_html__( 'Invalid ID', 'gravityformsaweber' );
+	}
+
+	/**
 	 * Returns the value to be displayed in the AWeber List column.
 	 *
 	 * @param array $feed The feed being included in the feed list.
@@ -351,9 +391,10 @@ class GFAWeber extends GFFeedAddOn {
 		if ( ! isset( $_lists ) ) {
 
 			$aweber = $this->get_aweber_object();
-			if ( ! $aweber ) {
+			if ( ! $aweber || ! $this->is_valid_account_id( $account_id ) ) {
 				return '';
 			}
+
 			$account = $aweber->loadFromUrl( 'https://api.aweber.com/1.0/accounts/' . $account_id );
 
 			$_lists = $account->lists;
@@ -434,7 +475,9 @@ class GFAWeber extends GFFeedAddOn {
 	 * @return bool
 	 */
 	public function is_accounts_hidden() {
-		if ( $this->has_multiple_accounts() ) {
+		$account_id = $this->get_setting( 'account', $this->get_default_account() );
+
+		if ( ( ! empty( $account_id ) && ! $this->is_valid_account_id( $account_id ) ) || $this->has_multiple_accounts() ) {
 			return false;
 		}
 
@@ -454,7 +497,9 @@ class GFAWeber extends GFFeedAddOn {
 			return;
 		}
 
-		if ( $this->has_multiple_accounts() ) {
+		$account_id = $this->get_setting( 'account' );
+
+		if ( ( ! empty( $account_id ) && ! $this->is_valid_account_id( $account_id ) ) || $this->has_multiple_accounts() ) {
 			$accounts_dropdown[] = array(
 				'label' => esc_html__( 'Select Account', 'gravityformsaweber' ),
 				'value' => '',
@@ -485,10 +530,9 @@ class GFAWeber extends GFFeedAddOn {
 	 */
 	public function settings_contact_list( $field, $echo = true ) {
 
-		$account_id = $this->get_setting( 'account' );
-		if ( empty( $account_id ) ) {
-			$accounts   = $this->get_accounts();
-			$account_id = $accounts->data['entries'][0]['id'];
+		$account_id = $this->get_setting( 'account', $this->get_default_account() );
+		if ( ! $this->is_valid_account_id( $account_id ) ) {
+			return;
 		}
 
 		$aweber = $this->get_aweber_object();
@@ -540,9 +584,8 @@ class GFAWeber extends GFFeedAddOn {
 
 		$account_id = $this->get_setting( 'account' );
 
-		if ( empty( $account_id ) ) {
-			$accounts   = $this->get_accounts();
-			$account_id = $accounts->data['entries'][0]['id'];
+		if ( ! $this->is_valid_account_id( $account_id ) ) {
+			return array();
 		}
 
 		$custom_fields = $this->get_custom_fields( $list_id, $account_id );
@@ -553,6 +596,47 @@ class GFAWeber extends GFFeedAddOn {
 
 
 	// # HELPERS -------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Return the default account.
+	 *
+	 * @return string
+	 */
+	public function get_default_account() {
+		$accounts = $this->get_accounts();
+
+		if ( is_object( $accounts ) && is_array( $accounts->data['entries'] ) ) {
+
+			return $accounts->data['entries']['0']['id'];
+		}
+
+		return '';
+	}
+
+	/**
+	 * Check if the account id is valid.
+	 *
+	 * @param string $account_id The AWeber account ID.
+	 *
+	 * @return bool
+	 */
+	public function is_valid_account_id( $account_id ) {
+		$is_valid = false;
+
+		if ( ! empty( $account_id ) ) {
+			$accounts = $this->get_accounts();
+
+			if ( is_object( $accounts ) && is_array( $accounts->data['entries'] ) ) {
+				foreach ( $accounts->data['entries'] as $account ) {
+					if ( $account_id == $account['id'] ) {
+						$is_valid = true;
+					}
+				}
+			}
+		}
+
+		return $is_valid;
+	}
 
 	/**
 	 * Do multiple accounts exist?
@@ -575,13 +659,9 @@ class GFAWeber extends GFFeedAddOn {
 	 */
 	public function has_selected_account() {
 
-		if ( $this->has_multiple_accounts() ) {
-			$selected_account = $this->get_setting( 'account' );
+		$account_id = $this->get_setting( 'account', $this->get_default_account() );
 
-			return ! empty( $selected_account );
-		}
-
-		return true;
+		return $this->is_valid_account_id( $account_id );
 	}
 
 	/**
@@ -615,7 +695,12 @@ class GFAWeber extends GFFeedAddOn {
 		$aweber = $this->get_aweber_object();
 
 		$custom_fields = array(
-			array( 'label' => 'Email Address', 'name' => 'email', 'required' => true, ),
+			array(
+				'label'      => 'Email Address',
+				'name'       => 'email',
+				'required'   => true,
+				'field_type' => array( 'email', 'hidden' )
+			),
 			array( 'label' => 'Full Name', 'name' => 'fullname' ),
 		);
 
@@ -623,6 +708,10 @@ class GFAWeber extends GFFeedAddOn {
 		$aweber_custom_fields = $aweber->loadFromUrl( 'https://api.aweber.com/1.0/accounts/' . $account_id . '/lists/' . $list_id . '/custom_fields' );
 
 		foreach ( $aweber_custom_fields as $cf ) {
+			if ( empty( $cf->data['name'] ) || empty( $cf->data['id'] ) ) {
+				continue;
+			}
+
 			$custom_fields[] = array( 'label' => $cf->data['name'], 'name' => 'cf_' . $cf->data['id'] );
 		}
 

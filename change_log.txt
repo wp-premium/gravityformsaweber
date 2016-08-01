@@ -1,4 +1,12 @@
 ------------------------------------------------
+Version 2.4
+    - Updated to support feed duplication with Gravity Forms 1.9.15+.
+    - Updated the choices for the Email Address field to only list email and hidden type form fields.
+    - Fixed an issue with custom fields returned by the AWeber API which don't have labels.
+    - Fixed fatal error which could occur during feed processing if the configured account ID for the feed becomes invalid.
+    - Fixed fatal error which could occur if the configured account ID for the feed becomes invalid.
+
+------------------------------------------------
 Version 2.3
     - Added form and field specific versions of the gform_aweber_field_value filter.
     - Updated minimum Gravity Forms version to 1.9.3.
