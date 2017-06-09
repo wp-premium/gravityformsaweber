@@ -134,6 +134,20 @@ class GFAWeber extends GFFeedAddOn {
 			$this->log_debug( __METHOD__ . '(): Creating subscriber: ' . print_r( $params, true ) );
 			$new_subscriber = $subscribers->create( $params );
 			$this->log_debug( __METHOD__ . '(): Subscriber created.' );
+
+			$subscriber = rgobj( $new_subscriber, 'data' );
+
+			/**
+			 * Perform a custom action when a subscriber is successfully added to the list.
+			 *
+			 * @param array $subscriber The subscriber properties.
+			 * @param array $form The form currently being processed.
+			 * @param array $entry The entry currently being processed.
+			 * @param array $feed The feed currently being processed.
+			 *
+			 * @since 2.4.1
+			 */
+			do_action( 'gform_aweber_post_subscriber_created', $subscriber, $form, $entry, $feed );
 		} catch ( AWeberAPIException $exc ) {
 			$this->log_error( __METHOD__ . "(): Unable to create subscriber: {$exc}" );
 		}
@@ -229,7 +243,7 @@ class GFAWeber extends GFFeedAddOn {
 		return array(
 			array(
 				'title'       => esc_html__( 'AWeber Account Information', 'gravityformsaweber' ),
-				'description' => sprintf( esc_html__( 'AWeber is an email marketing software for designers and their clients. Use Gravity Forms to collect customer information and automatically add them to your client\'s AWeber subscription list. If you don\'t have a AWeber account, you can %1$ssign up for one here%2$s', 'gravityformsaweber' ),
+				'description' => sprintf( esc_html__( 'AWeber is an email marketing software for designers and their clients. Use Gravity Forms to collect customer information and automatically add it to your client\'s AWeber subscription list. If you don\'t have an AWeber account, you can %1$ssign up for one here%2$s', 'gravityformsaweber' ),
 						'<a href="http://www.aweber.com" target="_blank">', '</a>.' )
 					. '<br/><br/>' .
 					sprintf( esc_html__( '%1$sClick here to retrieve your Authorization code%2$s', 'gravityformsaweber' ),
@@ -263,7 +277,7 @@ class GFAWeber extends GFFeedAddOn {
 
 		$authorization_code_field = $this->settings_text( $field, false );
 
-		$caption = esc_html__( 'You can find your unique Authorization code by clicking on the link above and login into your AWeber account.', 'gravityformsaweber' );
+		$caption = esc_html__( 'You can find your unique Authorization code by clicking on the link above and logging into your AWeber account.', 'gravityformsaweber' );
 
 		if ( $echo ) {
 			echo $authorization_code_field . '</br><small>' . $caption . '</small>';
@@ -316,7 +330,7 @@ class GFAWeber extends GFFeedAddOn {
 			return sprintf( __( 'To get started, please configure your %s.', 'gravityforms' ), $settings_link );
 		}
 
-		return sprintf( __( 'We are unable to login to AWeber with the provided Authorization code. Please make sure you have entered a valid Authorization code on the %s page.', 'gravityformsaweber' ), $settings_link );
+		return sprintf( __( 'We are unable to log in to AWeber with the provided Authorization code. Please make sure you have entered a valid Authorization code on the %s page.', 'gravityformsaweber' ), $settings_link );
 
 	}
 

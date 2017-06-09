@@ -548,7 +548,17 @@ class OAuthApplication implements AWeberOAuthAdapter {
         curl_setopt($handle, CURLOPT_HEADER, true);
         curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($handle, CURLOPT_USERAGENT, $this->userAgent);
-        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+	    /***
+	     * Determines if the cURL CURLOPT_SSL_VERIFYPEER option is enabled.
+	     *
+	     * @since 1.2
+	     *
+	     * @param bool is_enabled True to enable peer verification. False to bypass peer verification. Defaults to true.
+	     */
+	    $verify_peer = apply_filters( 'gform_aweber_verifypeer', true );
+	    curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $verify_peer);
+
         curl_setopt($handle, CURLOPT_VERBOSE, FALSE);
         curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($handle, CURLOPT_TIMEOUT, 90);
