@@ -1,5 +1,10 @@
 <?php
 
+// don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+    die();
+}
+
 class AWeberEntry extends AWeberResponse {
 
     /**
@@ -46,18 +51,22 @@ class AWeberEntry extends AWeberResponse {
     }
 
     /**
-     * _type 
+     * _type
      *
-     * Used to pull the name of this resource from its resource_type_link 
+     * Used to pull the name of this resource from its resource_type_link
      * @access protected
      * @return String
      */
     protected function _type() {
         if (empty($this->type)) {
-            $typeLink = $this->data['resource_type_link'];
-            if (empty($typeLink)) return null;
-            list($url, $type) = explode('#', $typeLink);
-            $this->type = $type;
+            if (!empty($this->data['resource_type_link'])) {
+                list($url, $type) = explode('#', $this->data['resource_type_link']);
+                $this->type = $type;
+            } elseif (!empty($this->data['broadcast_id'])) {
+                $this->type = 'broadcast';
+            } else {
+                return null;
+            }
         }
         return $this->type;
     }
@@ -92,9 +101,16 @@ class AWeberEntry extends AWeberResponse {
      * @return mixed AWeberEntry(Resource) Resource created on List ($list)
      *                                     or False if resource was not created.
      */
-    public function move($list) {
+    public function move($list, $last_followup_message_number_sent=NULL) {
         # Move Resource
-        $params = array('ws.op' => 'move', 'list_link' => $list->self_link);
+        $params = array(
+                        'ws.op' => 'move',
+                        'list_link' => $list->self_link
+                    );
+        if (isset($last_followup_message_number_sent)) {
+            $params['last_followup_message_number_sent'] = $last_followup_message_number_sent;
+        }
+
         $data = $this->adapter->request('POST', $this->url, $params, array('return' => 'headers'));
 
         # Return new Resource
@@ -112,7 +128,7 @@ class AWeberEntry extends AWeberResponse {
      */
     public function save() {
         if (!empty($this->_localDiff)) {
-            $data = $this->adapter->request('PATCH', $this->url, $this->_localDiff, array('return' => 'status'));
+            $data = $this->adapter->request('PATCH', $this->url, $this->_localDiff, array('return' => 'status'), array('Content-Type: application/json'));
         }
         $this->_localDiff = array();
         return true;
@@ -122,10 +138,10 @@ class AWeberEntry extends AWeberResponse {
     /**
      * __get
      *
-     * Used to look up items in data, and special properties like type and 
+     * Used to look up items in data, and special properties like type and
      * child collections dynamically.
      *
-     * @param String $value     Attribute being accessed  
+     * @param String $value     Attribute being accessed
      * @access public
      * @throws AWeberResourceNotImplemented
      * @return mixed
@@ -159,7 +175,7 @@ class AWeberEntry extends AWeberResponse {
      * @access public
      */
     public function __set($key, $value) {
-        if (isset($this->data[$key])) {
+        if (array_key_exists($key, $this->data)) {
             $this->_localDiff[$key] = $value;
             return $this->data[$key] = $value;
         } else {
@@ -216,7 +232,7 @@ class AWeberEntry extends AWeberResponse {
      * Returns NULL if no parent entry
      */
     public function getParentEntry(){
-        $url_parts = split('/', $this->url);
+        $url_parts = explode('/', $this->url);
         $size = count($url_parts);
 
         #Remove entry id and slash from end of url
@@ -265,11 +281,11 @@ class AWeberEntry extends AWeberResponse {
     /**
      * _parseNamedOperation
      *
-     * Turns a dumb array of json into an array of Entries.  This is NOT 
+     * Turns a dumb array of json into an array of Entries.  This is NOT
      * a collection, but simply an array of entries, as returned from a
      * named operation.
      *
-     * @param array $data 
+     * @param array $data
      * @access protected
      * @return array
      */
@@ -277,7 +293,7 @@ class AWeberEntry extends AWeberResponse {
         $results = array();
         foreach($data as $entryData) {
             $results[] = new AWeberEntry($entryData, str_replace($this->adapter->app->getBaseUri(), '',
-               $entryData['self_link']), $this->adapter); 
+               $entryData['self_link']), $this->adapter);
         }
         return $results;
     }
@@ -297,7 +313,7 @@ class AWeberEntry extends AWeberResponse {
     }
 
     /**
-     * _getCollection 
+     * _getCollection
      *
      * Returns the AWeberCollection object representing the given
      * collection name, relative to this entry.
