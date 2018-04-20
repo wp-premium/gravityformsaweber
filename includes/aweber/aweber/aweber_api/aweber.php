@@ -79,10 +79,10 @@ class AWeberAPIBase {
      * Maintains data about what children collections a given object type
      * contains.
      */
-    static public $_collectionMap = array(
+    static protected $_collectionMap = array(
         'account'              => array('lists', 'integrations'),
-        'broadcast_campaign'   => array('links', 'messages'),
-        'followup_campaign'    => array('links', 'messages'),
+        'broadcast_campaign'   => array('links', 'messages', 'stats'),
+        'followup_campaign'    => array('links', 'messages', 'stats'),
         'link'                 => array('clicks'),
         'list'                 => array('campaigns', 'custom_fields', 'subscribers',
                                         'web_forms', 'web_form_split_tests'),
@@ -120,9 +120,9 @@ class AWeberAPIBase {
      */
     protected function readResponse($response, $url) {
         $this->adapter->parseAsError($response);
-        if (!empty($response['id'])) {
+        if (!empty($response['id']) || !empty($response['broadcast_id'])) {
             return new AWeberEntry($response, $url, $this->adapter);
-        } else if (isset($response['entries'])) {
+        } else if (array_key_exists('entries', $response)) {
             return new AWeberCollection($response, $url, $this->adapter);
         }
         return false;
@@ -176,7 +176,7 @@ class AWeberAPI extends AWeberAPIBase {
     }
 
     protected static function _parseAWeberID($string) {
-        $values = split('\|', $string);
+        $values = explode('|', $string);
         if (count($values) < 5) {
             return null;
         }
@@ -288,3 +288,5 @@ class AWeberAPI extends AWeberAPIBase {
         return $this->adapter->getAccessToken();
     }
 }
+
+?>
