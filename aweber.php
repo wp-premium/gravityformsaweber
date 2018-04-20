@@ -1,11 +1,18 @@
 <?php
+
+// don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
+}
+
 /*
 Plugin Name: Gravity Forms AWeber Add-On
-Plugin URI: http://www.gravityforms.com
+Plugin URI: https://www.gravityforms.com
 Description: Integrates Gravity Forms with AWeber, allowing form submissions to be automatically sent to your AWeber account
-Version: 2.5
+Version: 2.7
 Author: rocketgenius
-Author URI: http://www.rocketgenius.com
+Author URI: https://www.rocketgenius.com
+License: GPL-2.0+
 Text Domain: gravityformsaweber
 Domain Path: /languages
 
@@ -27,13 +34,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-define( 'GF_AWEBER_VERSION', '2.5' );
+/**
+ * Current version of AWeber Add-On.
+ */
+define( 'GF_AWEBER_VERSION', '2.7' );
 
+// If Gravity Forms is loaded, bootstrap the AWeber Add-On.
 add_action( 'gform_loaded', array( 'GF_AWeber_Bootstrap', 'load' ), 5 );
 
+/**
+ * Class GF_AWeber_Bootstrap
+ *
+ * Handles the loading of the AWeber Add-On and registers it with the Add-On Framework.
+ */
 class GF_AWeber_Bootstrap {
 
-	public static function load(){
+	/**
+	 * If the Add-On Framework exists, load AWeber Add-On.
+	 *
+	 * @access public
+	 * @static
+	 */
+	public static function load() {
 
 		if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
 			return;
@@ -42,9 +64,18 @@ class GF_AWeber_Bootstrap {
 		require_once( 'class-gf-aweber.php' );
 
 		GFAddOn::register( 'GFAWeber' );
+
 	}
+
 }
 
-function gf_aweber(){
+/**
+ * Returns an instance of the GFAWeber class.
+ *
+ * @see GFAWeber::get_instance()
+ *
+ * @return GFAWeber
+ */
+function gf_aweber() {
 	return GFAWeber::get_instance();
 }
