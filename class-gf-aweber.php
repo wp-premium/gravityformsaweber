@@ -196,6 +196,8 @@ class GFAWeber extends GFFeedAddOn {
 	 * @return array
 	 */
 	public function plugin_settings_fields() {
+		$auth_url   = 'https://auth.aweber.com/1.0/oauth/authorize_app/' . $this->get_app_id();
+		$auth_a_tag = sprintf( '<a onclick="window.open(this.href,\'\',\'resizable=yes,location=no,width=750,height=525,status\'); return false" href="%s">', esc_url( $auth_url ) );
 
 		return array(
 			array(
@@ -209,7 +211,7 @@ class GFAWeber extends GFFeedAddOn {
 					),
 					sprintf(
 						esc_html__( '%1$sClick here to retrieve your Authorization code%2$s', 'gravityformsaweber' ),
-						'<a onclick="window.open(this.href,\'\',\'resizable=yes,location=no,width=750,height=525,status\'); return false" href="https://auth.aweber.com/1.0/oauth/authorize_app/2ad0d7d5">',
+						$auth_a_tag,
 						'</a>.'
 					),
 					esc_html__( 'You will need to log in to your AWeber account. Upon a successful login, a string will be returned. Copy the whole string and paste into the text box below.', 'gravityformsaweber' )
@@ -226,6 +228,27 @@ class GFAWeber extends GFFeedAddOn {
 			),
 		);
 
+	}
+
+	/**
+	 * Returns the AWeber app id to be used when authorizing the add-on with AWeber.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @return string
+	 */
+	public function get_app_id() {
+
+		/**
+		 * Allows a custom AWeber app id to be defined for use when authorizing the add-on with AWeber.
+		 *
+		 * @since 2.7.1
+		 *
+		 * @param string $app_id The AWeber app id.
+		 */
+		$app_id = apply_filters( 'gform_aweber_app_id', '2ad0d7d5' );
+
+		return $app_id;
 	}
 
 	/**
@@ -359,6 +382,18 @@ class GFAWeber extends GFFeedAddOn {
 							'<h6>%s</h6>%s',
 							esc_html__( 'Map Fields', 'gravityformsaweber' ),
 							esc_html__( 'Associate your AWeber fields to the appropriate Gravity Form fields by selecting the appropriate form field from the list.', 'gravityformsaweber' )
+						),
+					),
+					array(
+						'name'    => 'tags',
+						'type'    => 'text',
+						'dependency' => 'contactList',
+						'class'   => 'medium merge-tag-support mt-position-right mt-hide_all_fields',
+						'label'   => esc_html__( 'Tags', 'gravityformsaweber' ),
+						'tooltip' => sprintf(
+							'<h6>%s</h6>%s',
+							esc_html__( 'Tags', 'gravityformsaweber' ),
+							esc_html__( 'Associate tags to your AWeber subscribers with a comma separated list. (e.g. new lead, Gravity Forms, web source)', 'gravityformsaweber' )
 						),
 					),
 					array(
@@ -744,7 +779,6 @@ class GFAWeber extends GFFeedAddOn {
 		// If API credentials are invalid, exit.
 		if ( ! $this->is_valid_key() ) {
 			$this->add_feed_error( esc_html__( 'Unable to subscribe user because API could not be initialized.', 'gravityformsaweber' ), $feed, $entry, $form );
-
 			return $entry;
 		}
 
@@ -754,7 +788,6 @@ class GFAWeber extends GFFeedAddOn {
 		// If email address is invalid, exit.
 		if ( GFCommon::is_invalid_or_empty_email( $email ) ) {
 			$this->add_feed_error( esc_html__( 'Unable to subscribe user because email address was invalid.', 'gravityformsaweber' ), $feed, $entry, $form );
-
 			return $entry;
 		}
 
@@ -764,7 +797,6 @@ class GFAWeber extends GFFeedAddOn {
 		// If account ID is invalid, exit.
 		if ( ! $this->is_valid_account_id( $account_id ) ) {
 			$this->add_feed_error( esc_html__( 'Unable to subscribe user because account ID was invalid.', 'gravityformsaweber' ), $feed, $entry, $form );
-
 			return $entry;
 		}
 
@@ -821,6 +853,29 @@ class GFAWeber extends GFFeedAddOn {
 		// Ad tracking has a max size of 20 characters.
 		if ( strlen( $params['ad_tracking'] ) > 20 ) {
 			$params['ad_tracking'] = substr( $params['ad_tracking'], 0, 20 );
+		}
+
+		// Get tags.
+		$tags = explode(',', rgars( $feed, 'meta/tags' ) );
+		$tags = array_map( 'trim', $tags );
+
+		// Prepare tags.
+		if ( ! empty( $tags ) ) {
+
+			// Loop through tags, replace merge tags.
+			foreach ( $tags as &$tag ) {
+				$tag = GFCommon::replace_variables( $tag, $form, $entry, false, false, false, 'text' );
+				$tag = trim( $tag );
+			}
+
+			// Remove empty tags.
+			$tags = array_filter( $tags );
+
+		}
+
+		// Add tags.
+		if ( ! empty( $tags ) ) {
+			$params['tags'] = $tags;
 		}
 
 		$params = gf_apply_filters( 'gform_aweber_args_pre_subscribe', $form['id'], $params, $form, $entry, $feed );
