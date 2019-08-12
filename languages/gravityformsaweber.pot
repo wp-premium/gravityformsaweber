@@ -1,28 +1,38 @@
-# Copyright 2009-2018 Rocketgenius, Inc.
+# Copyright (C) 2019 rocketgenius
+# This file is distributed under the same license as the Gravity Forms AWeber Add-On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms AWeber Add-On 2.8\n"
-"Report-Msgid-Bugs-To: https://www.gravtiyforms.com\n"
-"POT-Creation-Date: 2018-11-02 18:40:27+00:00\n"
+"Project-Id-Version: Gravity Forms AWeber Add-On 2.9\n"
+"Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
+"Last-Translator: Gravity Forms <support@gravityforms.com>\n"
+"Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Rocketgenius <customerservice@rocketgenius.com>\n"
-"Language-Team: Rocketgenius <customerservice@rocketgenius.com>\n"
-"X-Generator: Gravity Forms Build Server\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"Project-Id-Version: gravityformsaweber\n"
-"Language: en_US\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Basepath: ../\n"
-"X-Poedit-Bookmarks: \n"
-"X-Poedit-Country: United States\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Textdomain-Support: yes\n"
+"POT-Creation-Date: 2019-08-07T11:34:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.2.0\n"
+"X-Domain: gravityformsaweber\n"
+
+#. Plugin Name of the plugin
+msgid "Gravity Forms AWeber Add-On"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.gravityforms.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates Gravity Forms with AWeber, allowing form submissions to be automatically sent to your AWeber account."
+msgstr ""
+
+#. Author of the plugin
+msgid "rocketgenius"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.rocketgenius.com"
+msgstr ""
 
 #: class-gf-aweber.php:179
 msgid "Subscribe user to AWeber only when payment is received."
@@ -33,11 +43,7 @@ msgid "AWeber Account Information"
 msgstr ""
 
 #: class-gf-aweber.php:208
-msgid ""
-"AWeber is an email marketing software for designers and their clients. Use "
-"Gravity Forms to collect customer information and automatically add it to "
-"your client's AWeber subscription list. If you don't have an AWeber "
-"account, you can %1$ssign up for one here%2$s"
+msgid "AWeber is an email marketing software for designers and their clients. Use Gravity Forms to collect customer information and automatically add it to your client's AWeber subscription list. If you don't have an AWeber account, you can %1$ssign up for one here%2$s"
 msgstr ""
 
 #: class-gf-aweber.php:213
@@ -45,10 +51,7 @@ msgid "%1$sClick here to retrieve your Authorization code%2$s"
 msgstr ""
 
 #: class-gf-aweber.php:217
-msgid ""
-"You will need to log in to your AWeber account. Upon a successful login, a "
-"string will be returned. Copy the whole string and paste into the text box "
-"below."
+msgid "You will need to log in to your AWeber account. Upon a successful login, a string will be returned. Copy the whole string and paste into the text box below."
 msgstr ""
 
 #: class-gf-aweber.php:222
@@ -56,16 +59,16 @@ msgid "Authorization Code"
 msgstr ""
 
 #: class-gf-aweber.php:302
-msgid ""
-"You can find your unique Authorization code by clicking on the link above "
-"and logging into your AWeber account."
+msgid "You can find your unique Authorization code by clicking on the link above and logging into your AWeber account."
 msgstr ""
 
 #: class-gf-aweber.php:335
 msgid "AWeber Feed"
 msgstr ""
 
-#: class-gf-aweber.php:340 class-gf-aweber.php:346 class-gf-aweber.php:660
+#: class-gf-aweber.php:340
+#: class-gf-aweber.php:346
+#: class-gf-aweber.php:660
 msgid "Name"
 msgstr ""
 
@@ -73,7 +76,8 @@ msgstr ""
 msgid "Enter a feed name to uniquely identify this setup."
 msgstr ""
 
-#: class-gf-aweber.php:352 class-gf-aweber.php:359
+#: class-gf-aweber.php:352
+#: class-gf-aweber.php:359
 msgid "Account"
 msgstr ""
 
@@ -81,7 +85,8 @@ msgstr ""
 msgid "Select the AWeber account you would like to add your contacts to."
 msgstr ""
 
-#: class-gf-aweber.php:365 class-gf-aweber.php:371
+#: class-gf-aweber.php:365
+#: class-gf-aweber.php:371
 msgid "Contact List"
 msgstr ""
 
@@ -89,35 +94,31 @@ msgstr ""
 msgid "Select the AWeber list you would like to add your contacts to."
 msgstr ""
 
-#: class-gf-aweber.php:377 class-gf-aweber.php:383
+#: class-gf-aweber.php:377
+#: class-gf-aweber.php:383
 msgid "Map Fields"
 msgstr ""
 
 #: class-gf-aweber.php:384
-msgid ""
-"Associate your AWeber fields to the appropriate Gravity Form fields by "
-"selecting the appropriate form field from the list."
+msgid "Associate your AWeber fields to the appropriate Gravity Form fields by selecting the appropriate form field from the list."
 msgstr ""
 
-#: class-gf-aweber.php:392 class-gf-aweber.php:395
+#: class-gf-aweber.php:392
+#: class-gf-aweber.php:395
 msgid "Tags"
 msgstr ""
 
 #: class-gf-aweber.php:396
-msgid ""
-"Associate tags to your AWeber subscribers with a comma separated list. "
-"(e.g. new lead, Gravity Forms, web source)"
+msgid "Associate tags to your AWeber subscribers with a comma separated list. (e.g. new lead, Gravity Forms, web source)"
 msgstr ""
 
-#: class-gf-aweber.php:401 class-gf-aweber.php:406
+#: class-gf-aweber.php:401
+#: class-gf-aweber.php:406
 msgid "Conditional Logic"
 msgstr ""
 
 #: class-gf-aweber.php:407
-msgid ""
-"When conditional logic is enabled, form submissions will only be exported "
-"to AWeber when the condition is met. When disabled all form submissions "
-"will be exported."
+msgid "When conditional logic is enabled, form submissions will only be exported to AWeber when the condition is met. When disabled all form submissions will be exported."
 msgstr ""
 
 #: class-gf-aweber.php:495
@@ -162,26 +163,4 @@ msgstr ""
 
 #: class-gf-aweber.php:1096
 msgid "Full Name"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Gravity Forms AWeber Add-On"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://www.gravityforms.com"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid ""
-"Integrates Gravity Forms with AWeber, allowing form submissions to be "
-"automatically sent to your AWeber account"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "rocketgenius"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://www.rocketgenius.com"
 msgstr ""
