@@ -588,7 +588,6 @@ class OAuthApplication implements AWeberOAuthAdapter {
         $this->curl->setopt($handle, CURLOPT_HEADER, true);
         $this->curl->setopt($handle, CURLOPT_HTTPHEADER, $headers);
         $this->curl->setopt($handle, CURLOPT_USERAGENT, $this->userAgent());
-        $this->curl->setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
         $this->curl->setopt($handle, CURLOPT_VERBOSE, FALSE);
         $this->curl->setopt($handle, CURLOPT_CONNECTTIMEOUT, 10);
         $this->curl->setopt($handle, CURLOPT_TIMEOUT, 90);

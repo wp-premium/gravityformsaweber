@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /*
 Plugin Name: Gravity Forms AWeber Add-On
 Plugin URI: https://www.gravityforms.com
-Description: Integrates Gravity Forms with AWeber, allowing form submissions to be automatically sent to your AWeber account
-Version: 2.8
+Description: Integrates Gravity Forms with AWeber, allowing form submissions to be automatically sent to your AWeber account.
+Version: 2.9
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 /**
  * Current version of AWeber Add-On.
  */
-define( 'GF_AWEBER_VERSION', '2.8' );
+define( 'GF_AWEBER_VERSION', '2.9' );
 
 // If Gravity Forms is loaded, bootstrap the AWeber Add-On.
 add_action( 'gform_loaded', array( 'GF_AWeber_Bootstrap', 'load' ), 5 );
