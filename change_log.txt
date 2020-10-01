@@ -1,3 +1,12 @@
+### 2.11 | 2020-09-21
+- Added support for Gravity Forms 2.5.
+- Fixed an issue where the contact is not created if there are blank tags.
+
+
+### 2.10 | 2020-03-11
+- Added translations for Hebrew, Hindi, Japanese, and Turkish.
+- Fixed PHP 7.4 notices which occur when saving the settings for the first time.
+
 ### 2.9 | 2019-08-07
 - Added security enhancements.
 

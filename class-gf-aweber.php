@@ -181,6 +181,19 @@ class GFAWeber extends GFFeedAddOn {
 
 	}
 
+	/**
+	 * Return the plugin's icon for the plugin/form settings menu.
+	 *
+	 * @since 2.11
+	 *
+	 * @return string
+	 */
+	public function get_menu_icon() {
+
+		return file_get_contents( $this->get_base_path() . '/images/menu-icon.svg' );
+
+	}
+
 
 
 
@@ -220,8 +233,9 @@ class GFAWeber extends GFFeedAddOn {
 					array(
 						'name'              => 'authorizationCode',
 						'label'             => esc_html__( 'Authorization Code', 'gravityformsaweber' ),
-						'type'              => 'authorization_code',
+						'type'              => 'text',
 						'class'             => 'medium',
+						'description'       => esc_html__( 'You can find your unique Authorization code by clicking on the link above and logging into your AWeber account.', 'gravityformsaweber' ),
 						'feedback_callback' => array( $this, 'is_valid_key' ),
 					),
 				),
@@ -264,10 +278,10 @@ class GFAWeber extends GFFeedAddOn {
 	 */
 	public function update_plugin_settings( $settings ) {
 
-		$saved_settings             = $this->get_plugin_settings();
-		$authorization_is_different = $saved_settings['authorizationCode'] != $settings['authorizationCode'];
+		$saved_settings  = $this->get_plugin_settings();
+		$requires_tokens = empty( $saved_settings['access_token'] ) || $saved_settings['authorizationCode'] != $settings['authorizationCode'];
 
-		if ( $authorization_is_different ) {
+		if ( $requires_tokens ) {
 			$aweber_token                    = $this->get_aweber_tokens( $settings['authorizationCode'] );
 			$settings['access_token']        = $aweber_token['access_token'];
 			$settings['access_token_secret'] = $aweber_token['access_token_secret'];
@@ -277,36 +291,6 @@ class GFAWeber extends GFFeedAddOn {
 		}
 
 		parent::update_plugin_settings( $settings );
-
-	}
-
-	/**
-	 * Define the markup for the authorization_code type field.
-	 *
-	 * @since  Unknown
-	 * @access public
-	 *
-	 * @param array     $field The field properties.
-	 * @param bool|true $echo  Should the setting markup be echoed.
-	 *
-	 * @return string
-	 */
-	public function settings_authorization_code( $field, $echo = true ) {
-
-		// Prepare text input.
-		$html = $this->settings_text( $field, false );
-
-		// Add caption.
-		$html .= sprintf(
-			'</br><small>%s</small>',
-			esc_html__( 'You can find your unique Authorization code by clicking on the link above and logging into your AWeber account.', 'gravityformsaweber' )
-		);
-
-		if ( $echo ) {
-			echo $html;
-		}
-
-		return $html;
 
 	}
 
@@ -363,9 +347,11 @@ class GFAWeber extends GFFeedAddOn {
 					array(
 						'name'       => 'contactList',
 						'label'      => esc_html__( 'Contact List', 'gravityformsaweber' ),
-						'type'       => 'contact_list',
+						'type'       => 'select',
+						'choices'    => $this->get_lists_as_choices(),
 						'onchange'   => 'jQuery(this).parents("form").submit();',
 						'dependency' => array( $this, 'has_selected_account' ),
+						'no_choices' => esc_html__( 'Unable to get lists.', 'gravityformsaweber' ),
 						'tooltip'    => sprintf(
 							'<h6>%s</h6>%s',
 							esc_html__( 'Contact List', 'gravityformsaweber' ),
@@ -514,30 +500,22 @@ class GFAWeber extends GFFeedAddOn {
 	}
 
 	/**
-	 * Define the markup for the contact_list type field.
+	 * Returns AWeber lists as a collection of drop down choices.
 	 *
-	 * @since  Unknown
+	 * @since  2.11
 	 * @access public
 	 *
-	 * @param array     $field The field properties.
-	 * @param bool|true $echo  Should the setting markup be echoed.
-	 *
-	 * @uses   AWeberAPIBase::loadFromUrl()
-	 * @uses   GFAddOn::get_setting()
-	 * @uses   GFAddOn::settings_select()
-	 * @uses   GFAWeber::get_aweber_object()
-	 * @uses   GFAWeber::is_valid_account_id()
-	 *
-	 * @return string
+	 * @return array
 	 */
-	public function settings_contact_list( $field, $echo = true ) {
+	public function get_lists_as_choices() {
 
 		// Get account ID.
 		$account_id = $this->get_setting( 'account', $this->get_default_account() );
 
 		// If account ID is invalid, return.
 		if ( ! $this->is_valid_account_id( $account_id ) ) {
-			return '';
+			$this->log_error( __METHOD__ . '(): Invalid account ID: ' . $account_id );
+			return array();
 		}
 
 		// Get AWeber API object.
@@ -548,11 +526,12 @@ class GFAWeber extends GFFeedAddOn {
 
 		// If AWeber account could not be retrieved, return.
 		if ( ! $account ) {
-			return '';
+			$this->log_error( __METHOD__ . '(): Unable to retrieve account.' );
+			return array();
 		}
 
 		// Add initial choice.
-		$field['choices'] = array(
+		$choices = array(
 			array(
 				'label' => esc_html__( 'Select List', 'gravityformsaweber' ),
 				'value' => '',
@@ -563,21 +542,14 @@ class GFAWeber extends GFFeedAddOn {
 		foreach ( $account->lists as $list ) {
 
 			// Add list as choice.
-			$field['choices'][] = array(
+			$choices[] = array(
 				'label' => esc_html( $list->name ),
 				'value' => esc_attr( $list->id ),
 			);
 
 		}
 
-		// Prepare input.
-		$html = $this->settings_select( $field, false );
-
-		if ( $echo ) {
-			echo $html;
-		}
-
-		return $html;
+		return $choices;
 
 	}
 
@@ -868,8 +840,8 @@ class GFAWeber extends GFFeedAddOn {
 				$tag = trim( $tag );
 			}
 
-			// Remove empty tags.
-			$tags = array_filter( $tags );
+			// Clean array of duplicate and empty items.
+			$tags = array_values( array_unique( array_filter( $tags ) ) );
 
 		}
 
